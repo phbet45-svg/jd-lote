@@ -49,6 +49,13 @@ import {
   RefreshCw
 } from 'lucide-react';
 
+const ADMIN_EMAILS = ['jdloteamentos@x.com', 'phbet45@gmail.com'];
+
+const isAdminEmail = (email: string | null | undefined): boolean => {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.toLowerCase().trim());
+};
+
 export default function App() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -95,7 +102,7 @@ export default function App() {
       return;
     }
     
-    if (user.email === 'jdloteamentos@x.com') {
+    if (isAdminEmail(user.email)) {
       // Administrator has full permissions
       setSellerProfile(null);
       return;
@@ -286,7 +293,7 @@ export default function App() {
 
   const isTabAllowed = (tab: 'dashboard' | 'clients' | 'cashflow' | 'projects' | 'new-client' | 'sellers') => {
     if (!user) return false;
-    if (user.email === 'jdloteamentos@x.com') return true; // admin has unrestricted access
+    if (isAdminEmail(user.email)) return true; // admin has unrestricted access
     if (tab === 'sellers') return false; // salespeople cannot manage other sellers
     if (!sellerProfile) return false; // wait for profile to load
     return sellerProfile.permissions[tab as keyof SellerPermissions] === true;
@@ -307,7 +314,7 @@ export default function App() {
   }
 
   // Render Salesperson permissions syncing view
-  if (user && user.email !== 'jdloteamentos@x.com' && loadingPermissions) {
+  if (user && !isAdminEmail(user.email) && loadingPermissions) {
     return (
       <div className="min-h-screen bg-[#FDFCF8] flex flex-col items-center justify-center gap-4" id="permissions-loader">
         <div className="animate-pulse">
@@ -322,7 +329,7 @@ export default function App() {
   }
 
   // Render Access Denied Panel if salesperson profile doesn't exist
-  if (user && user.email !== 'jdloteamentos@x.com' && !sellerProfile && !loadingPermissions) {
+  if (user && !isAdminEmail(user.email) && !sellerProfile && !loadingPermissions) {
     return (
       <div className="min-h-screen bg-[#FDFCF8] flex flex-col items-center justify-center p-4" id="access-denied-container">
         <div className="w-full max-w-md bg-white border border-[#0F3D1F10] rounded-3xl p-8 shadow-xl text-center space-y-6">
@@ -522,7 +529,7 @@ export default function App() {
             </button>
           )}
 
-          {user && user.email === 'jdloteamentos@x.com' && (
+          {user && isAdminEmail(user.email) && (
             <button
               onClick={() => setActiveTab('sellers')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition cursor-pointer ${
@@ -542,11 +549,11 @@ export default function App() {
           {/* User Profile info */}
           <div className="flex items-center gap-3 bg-white/5 border border-white/10 p-3 rounded-xl">
             <div className="w-9 h-9 rounded-full bg-[#D4AF37] flex items-center justify-center font-bold text-[#0F3D1F] text-sm select-none">
-              {user.email === 'jdloteamentos@x.com' ? 'JD' : (sellerProfile?.name ? sellerProfile.name.substring(0, 2).toUpperCase() : 'VD')}
+              {isAdminEmail(user.email) ? 'JD' : (sellerProfile?.name ? sellerProfile.name.substring(0, 2).toUpperCase() : 'VD')}
             </div>
             <div className="flex-grow min-w-0">
               <h4 className="text-xs font-bold text-white truncate">
-                {user.email === 'jdloteamentos@x.com' ? 'JD Loteamentos' : (sellerProfile?.name || 'Vendedor')}
+                {isAdminEmail(user.email) ? 'JD Loteamentos' : (sellerProfile?.name || 'Vendedor')}
               </h4>
               <p className="text-[10px] text-white/60 truncate font-mono">{user.email}</p>
             </div>
@@ -800,7 +807,7 @@ export default function App() {
           )}
 
           {/* TAB 6: SELLERS MANAGER */}
-          {activeTab === 'sellers' && user && user.email === 'jdloteamentos@x.com' && (
+          {activeTab === 'sellers' && user && isAdminEmail(user.email) && (
             <SellersManager
               onSuccess={(msg) => addToast(msg, 'success')}
               onError={(msg) => addToast(msg, 'error')}
