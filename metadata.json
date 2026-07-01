@@ -1,0 +1,6 @@
+{
+  "name": "JD Loteamentos",
+  "description": "Site completo, moderno e profissional para a JD Loteamentos, com login administrativo, cadastro em tempo real, acompanhamento financeiro de caixa e quitação de lotes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

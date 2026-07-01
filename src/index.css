@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer utilities {
+  .animate-slide-in {
+    animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FDFCF8;
+}
+::-webkit-scrollbar-thumb {
+  background: #0F3D1F15;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+body {
+  background-color: #FDFCF8;
+  color: #1A1A1A;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Professional Polish theme fail-safes for arbitrary Tailwind utilities */
+.bg-\[\#070c08\] {
+  background-color: #FDFCF8 !important;
+}
+
+.bg-\[\#121c15\] {
+  background-color: #FFFFFF !important;
+  border-color: #0F3D1F10 !important;
+}
+
+.bg-\[\#0b120d\] {
+  background-color: #FDFCF8 !important;
+  border-color: #0F3D1F15 !important;
+}
+
+.bg-\[\#1c2720\] {
+  background-color: #FFFFFF !important;
+  border-color: #0F3D1F15 !important;
+  color: #1A1A1A !important;
+}
+
+.border-\[\#2d3a31\] {
+  border-color: #0F3D1F10 !important;
+}
+
+.border-\[\#2d3a31\V\/50\] {
+  border-color: #0F3D1F10 !important;
+}
+
+.border-\[\#2d3a31\V\/60\] {
+  border-color: #0F3D1F10 !important;
+}
+
+.border-\[\#2d3a31\V\/40\] {
+  border-color: #0F3D1F10 !important;
+}
+
+.text-\[\#F5F2EB\] {
+  color: #1A1A1A !important;
+}
+
+.text-\[\#eed082\] {
+  color: #D4AF37 !important;
+}
+
+/* Ensure inputs, selects and buttons styled with text-[#F5F2EB] or bg-[#0b120d] inherit properly */
+input, select, textarea {
+  color: #1A1A1A !important;
+}
+input::placeholder {
+  color: #9CA3AF !important;
+}
+

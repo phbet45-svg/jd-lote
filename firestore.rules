@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper to check if signed in as the JD Loteamentos administrator
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'jdloteamentos@x.com';
+    }
+
+    // Helper to check if user has a specific permission
+    function hasPermission(permissionName) {
+      return request.auth != null && (
+        isAdmin() || (
+          exists(/databases/$(database)/documents/sellers/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/sellers/$(request.auth.uid)).data.permissions[permissionName] == true
+        )
+      );
+    }
+
+    match /clients/{clientId} {
+      allow read: if hasPermission('clients') || hasPermission('dashboard');
+      allow create: if hasPermission('new-client') || isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if hasPermission('cashflow') || hasPermission('dashboard');
+      allow write: if isAdmin();
+    }
+
+    match /projects/{projectId} {
+      allow read: if hasPermission('projects') || hasPermission('dashboard');
+      allow write: if isAdmin();
+    }
+
+    match /sellers/{sellerId} {
+      allow read: if request.auth != null && (request.auth.uid == sellerId || isAdmin());
+      allow write: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "client": {
+      "title": "Client",
+      "description": "Client registry with lot payment status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "description": "Full name of the client" },
+        "cpf": { "type": "string" },
+        "rg": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": { "type": "string" },
+            "number": { "type": "string" },
+            "neighborhood": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "zip": { "type": "string" }
+          },
+          "required": ["street", "number", "neighborhood", "city", "state", "zip"]
+        },
+        "lot": { "type": "string", "description": "Lot description or ID" },
+        "valueTotal": { "type": "number" },
+        "valuePaid": { "type": "number" },
+        "status": { "type": "string", "enum": ["Em dia", "Atrasado", "Quitado"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "cpf", "rg", "phone", "email", "lot", "valueTotal", "valuePaid", "status", "createdAt", "updatedAt"]
+    },
+    "transaction": {
+      "title": "Transaction",
+      "description": "Finance cash flow transaction entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "description": { "type": "string" },
+        "value": { "type": "number" },
+        "type": { "type": "string", "enum": ["Entrada", "Saída"] },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "description", "value", "type", "category", "createdAt", "updatedAt"]
+    },
+    "project": {
+      "title": "Project",
+      "description": "Loteamento project progress and stats",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "progress": { "type": "number" },
+        "status": { "type": "string", "enum": ["Em andamento", "Concluído", "Em planejamento"] },
+        "soldLots": { "type": "number" },
+        "totalLots": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "progress", "status", "soldLots", "totalLots", "createdAt", "updatedAt"]
+    },
+    "seller": {
+      "title": "Seller",
+      "description": "Salesperson user with custom access permissions on the site",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "dashboard": { "type": "boolean" },
+            "clients": { "type": "boolean" },
+            "cashflow": { "type": "boolean" },
+            "projects": { "type": "boolean" },
+            "new-client": { "type": "boolean" }
+          },
+          "required": ["dashboard", "clients", "cashflow", "projects", "new-client"]
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "permissions", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "clients": {
+      "schema": "client",
+      "description": "List of clients purchasing lots"
+    },
+    "transactions": {
+      "schema": "transaction",
+      "description": "List of finance cash flow transactions"
+    },
+    "projects": {
+      "schema": "project",
+      "description": "Loteamentos projects overview"
+    },
+    "sellers": {
+      "schema": "seller",
+      "description": "Salespeople registered with custom permissions"
+    }
+  }
+}
